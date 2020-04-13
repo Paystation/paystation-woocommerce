@@ -2,7 +2,7 @@
 /*
 	Plugin Name: Paystation WooCommerce Payment Gateway
 	Description: Take credit card payments via Paystation's hosted payment pages.
-	Version: 1.1.3
+	Version: 1.1.4
 	Author: Paystation Limited
 	Author URI: http://www.paystation.co.nz
 	License: GPL-2.0+
@@ -29,7 +29,7 @@ function woocommerce_paystation_init()
             $this->method_title = __('Paystation', 'paystation');
             $this->method_description = __('Paystation allows you to accept credit card payments on your WooCommerce store.', 'paystation');
             $this->order_button_text = __('Proceed to Paystation', 'paystation');
-            $this->icon = plugins_url('assets/img/logo.svg', __FILE__);
+            $this->icon = plugins_url('assets/logo.svg', __FILE__);
             $this->has_fields = false;
             $this->supports = array('products', 'refunds');
             $this->title = $this->get_option('title');

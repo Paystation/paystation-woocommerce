@@ -3,7 +3,7 @@ Contributors: paystationNZ
 Tags: credit card, paystation, woocommerce, payment gateway, payment, gateway, credit, card, e-commerce, ecommerce, new zealand, nz, 
 Requires at least: 4.1
 Tested up to: 5.3.0
-Stable tag: 1.1.3
+Stable tag: 1.1.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -75,6 +75,9 @@ Details of the payment also appear in the Paystation Admin website, which you as
 [Visit the Test Card Number page](http://www.paystation.co.nz/for-developers/test-cards/)
 
 == Changelog ==
+= 1.1.4 [2020-01-07] =
+* Fixed image asset path
+
 = 1.1.3 [2019-11-12] =
 * Fixed image directory path not loading logo
 
