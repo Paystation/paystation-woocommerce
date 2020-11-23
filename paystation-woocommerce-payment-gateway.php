@@ -181,6 +181,14 @@ function woocommerce_paystation_init()
                 $transactionId = $xml->ti;
                 $merchantReference = $xml->merchant_ref;
 
+		if ( function_exists( 'wc_sequential_order_numbers' ) ) {
+			/*
+			* If using sequential order numbers then the merchant reference is the order_number not order_id
+			* So get order_id from order_number
+			*/
+			$merchantReference = wc_sequential_order_numbers()->find_order_by_order_number( (int) wc_clean( $merchantReference ) );
+		}
+
                 $order = wc_get_order((int)wc_clean($merchantReference));
 
                 if (!($order instanceof WC_Order) || !$order->needs_payment()) {
@@ -232,7 +240,17 @@ function woocommerce_paystation_init()
             $pstn_pi = trim($this->settings['paystation_id']);
             $pstn_gi = trim($this->settings['gateway_id']);
 
-            $pstn_mr = urlencode($order_id);
+            if ( function_exists( 'wc_sequential_order_numbers' ) ) {
+                /*
+                * If using sequential order numbers then the merchant reference should be set to the order_number not order_id
+                */
+                $order        = wc_get_order( $order_id );
+                $order_number = $order->get_order_number();
+                $pstn_mr      = urlencode( $order_number );
+            } else {
+                $pstn_mr = urlencode( $order_id );
+            }
+		
             $merchantSession = urlencode($this->makePaystationSessionID());
 
             $returnURL = $order->get_checkout_order_received_url();
@@ -284,7 +302,17 @@ function woocommerce_paystation_init()
             $pstn_pi = trim($this->get_option('paystation_id'));
             $pstn_gi = trim($this->get_option('gateway_id'));
 
-            $pstn_mr = urlencode($order_id);
+            if ( function_exists( 'wc_sequential_order_numbers' ) ) {
+                /*
+                * If using sequential order numbers then the merchant reference is the order_number not order_id
+                */
+                $order        = wc_get_order( $order_id );
+                $order_number = $order->get_order_number();
+                $pstn_mr      = urlencode( $order_number );
+            } else {
+                $pstn_mr = urlencode( $order_id );
+            }
+		
             $merchantSession = urlencode(time() . '-' . $this->makePaystationSessionID());
 
             $paystationParams = [
