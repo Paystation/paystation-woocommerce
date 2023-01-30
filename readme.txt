@@ -2,8 +2,8 @@
 Contributors: paystationNZ
 Tags: credit card, paystation, woocommerce, payment gateway, payment, gateway, credit, card, e-commerce, ecommerce, new zealand, nz, 
 Requires at least: 4.1
-Tested up to: 5.3.0
-Stable tag: 1.1.4
+Tested up to: 6.1
+Stable tag: 1.2.3
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -75,8 +75,31 @@ Details of the payment also appear in the Paystation Admin website, which you as
 [Visit the Test Card Number page](http://www.paystation.co.nz/for-developers/test-cards/)
 
 == Changelog ==
+= 1.2.3 [2022-11-01] =
+* Update supported Wordpress version
+
+= 1.2.2 [2022-10-25] =
+* Fixed typecasting of error code for postback
+
+= 1.2.1 [2022-06-03] =
+* Improved error logging
+
+= 1.2 [2022-06-03] =
+* Update supported Wordpress version
+* Fixed error on successful refund
+* Added: Order notes on failed refund containing error details with error code
+
+= 1.1.7 [2022-11-04] =
+* Change to fixed width logo
+
+= 1.1.6 [2021-16-06] =
+* Support for Sequential order numbers
+
+= 1.1.5 [2021-30-04] =
+* Update supported Wordpress version
+
 = 1.1.4 [2020-01-07] =
-* Fixed image asset path
+* Fixed image asset path 
 
 = 1.1.3 [2019-11-12] =
 * Fixed image directory path not loading logo

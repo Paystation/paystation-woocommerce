@@ -2,7 +2,7 @@
 /*
 	Plugin Name: Paystation WooCommerce Payment Gateway
 	Description: Take credit card payments via Paystation's hosted payment pages.
-	Version: 1.1.4
+	Version: 1.2.3
 	Author: Paystation Limited
 	Author URI: http://www.paystation.co.nz
 	License: GPL-2.0+
@@ -29,6 +29,7 @@ function woocommerce_paystation_init()
             $this->method_title = __('Paystation', 'paystation');
             $this->method_description = __('Paystation allows you to accept credit card payments on your WooCommerce store.', 'paystation');
             $this->order_button_text = __('Proceed to Paystation', 'paystation');
+            // Icon gets replaced by woocommerce_gateway_icon hook
             $this->icon = plugins_url('assets/logo.svg', __FILE__);
             $this->has_fields = false;
             $this->supports = array('products', 'refunds');
@@ -177,17 +178,17 @@ function woocommerce_paystation_init()
             $xml = simplexml_load_string($xml);
 
             if (!empty($xml)) {
-                $errorCode = (int)$xml->ec;
+                $errorCode = $xml->ec;
                 $transactionId = $xml->ti;
                 $merchantReference = $xml->merchant_ref;
 
-		if ( function_exists( 'wc_sequential_order_numbers' ) ) {
-			/*
-			* If using sequential order numbers then the merchant reference is the order_number not order_id
-			* So get order_id from order_number
-			*/
-			$merchantReference = wc_sequential_order_numbers()->find_order_by_order_number( (int) wc_clean( $merchantReference ) );
-		}
+                if ( function_exists( 'wc_sequential_order_numbers' ) ) {
+                    /*
+                    * If using sequential order numbers then the merchant reference is the order_number not order_id
+                    * So get order_id from order_number
+                    */
+                    $merchantReference = wc_sequential_order_numbers()->find_order_by_order_number( (int) wc_clean( $merchantReference ) );
+                }
 
                 $order = wc_get_order((int)wc_clean($merchantReference));
 
@@ -195,7 +196,7 @@ function woocommerce_paystation_init()
                     exit('cant find order');
                 }
 
-                if ($errorCode == 0) {
+                if ($errorCode == '0') {
                     echo "payment successful";
                     $order->payment_complete((string)esc_html($transactionId));
                 } else {
@@ -250,7 +251,7 @@ function woocommerce_paystation_init()
             } else {
                 $pstn_mr = urlencode( $order_id );
             }
-		
+
             $merchantSession = urlencode($this->makePaystationSessionID());
 
             $returnURL = $order->get_checkout_order_received_url();
@@ -280,11 +281,17 @@ function woocommerce_paystation_init()
             $hmacGetParams = $this->constructHMACParams($paystationParams);
             $paystationURL .= $hmacGetParams;
             $initiationResult = $this->directTransaction($paystationURL, $paystationParams);
-
             $json = json_decode($initiationResult, true);
+			if(isset($json['response']['PaystationErrorCode'])) {
+				$errorJson = $json['response'];
+				$errorMessage = isset($errorJson['PaystationErrorMessage']) ?  $errorJson['PaystationErrorMessage'] : '';
+				$transactionID = isset($errorJson['TransactionID']) ?  $errorJson['TransactionID'] : '';
+				$checkoutLog = 'Error Code: '.$errorJson['PaystationErrorCode'].' - Error Message: '.$errorMessage.' - TransactionID: '.$transactionID;
+				$logger = wc_get_logger();
+				$logger->error( $checkoutLog, array( 'source' => 'paystation' ) );
+			}
             $json = isset($json['InitiationRequestResponse']) ? $json['InitiationRequestResponse'] : null;
-            $url = $json['DigitalOrder'] ?: null;
-
+            $url = $json['DigitalOrder'] ?: null;		
             return $url;
         }
 
@@ -312,7 +319,7 @@ function woocommerce_paystation_init()
             } else {
                 $pstn_mr = urlencode( $order_id );
             }
-		
+
             $merchantSession = urlencode(time() . '-' . $this->makePaystationSessionID());
 
             $paystationParams = [
@@ -341,9 +348,16 @@ function woocommerce_paystation_init()
 
             $json = json_decode($result, true);
             $json = isset($json['PaystationRefundResponse']) ? $json['PaystationRefundResponse'] : null;
-            $errorCode = $json['PaystationErrorCode'] ?: null;
+            $errorCode = isset($json['PaystationErrorCode']) ? $json['PaystationErrorCode'] : null;
 
-            return $errorCode == '0';
+			if(!empty($errorCode) && $errorCode != '0') {
+				$errorMessage = isset($json['PaystationErrorMessage']) ?  $json['PaystationErrorMessage'] : null;
+				$refund_message = 'The refund has failed. Error: '.$errorMessage. ' ('.$errorCode.').';
+				$order = wc_get_order($order_id);
+				$order->add_order_note($refund_message);
+			}
+
+            return $errorCode === '0';
         }
 
         function constructHMACParams($body)
@@ -381,4 +395,17 @@ function woocommerce_paystation_init()
     }
 
     add_filter('plugin_action_links', 'paystation_plugin_action_links', 10, 2);
+
+    /**
+     *  Icon
+     */
+    function paystation_gateway_icon($icon, $gateway_id) {
+        if ($gateway_id == 'threeparty') {
+            $img = plugins_url( 'assets/logo.svg', __FILE__ );
+            return '<img src="'.$img.'" width="125" />';
+        }
+        return $icon;
+    }
+    add_filter('woocommerce_gateway_icon', 'paystation_gateway_icon', 10, 2 );
+
 }
