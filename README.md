@@ -1,10 +1,10 @@
 # Paystation payment plugin for WooCommerce
 
-This integration is currently only tested up to Wordpress 6.5.3 with WooCommerce 8.8.3
+This integration is currently tested up to WordPress 6.5.3 with WooCommerce 8.8.3
 
 ## Requirements
-* An account with [Paystation](https://paystation.co.nz/)
-* An HMAC key for your Paystation account, contact our support team if you do not already have this [support@paystation.co.nz](https://paystation.co.nz/)
+* An account with [Paystation](https://paystation.co.nz/pricing/)
+* An HMAC key for your Paystation account, contact our support team [via email](mailto:support@paystation.co.nz) if you do not already have this.
 
 ## Installation
 
@@ -23,7 +23,7 @@ You can install this plugin [here](https://wordpress.org/plugins/paystation-wooc
 7. Enter HMAC key as provided by Paystation
 8. Select the `Enable test mode` box if required.
 9. Click `Save changes` button.
-10. Email [support@paystation.co.nz]() if you have any issues with the below details:
+10. Email our support team [via email](mailto:support@paystation.co.nz) if you have any issues with the below details:
     a) Your Paystation ID, 
     b) Gateway ID,
     c) confirming that you are using the Paystation WooCommerce plugin, 
@@ -32,7 +32,7 @@ You can install this plugin [here](https://wordpress.org/plugins/paystation-wooc
 ## Testing Payments
 
 1. Ensure your Paystation settings have `Enable test mode` box ticked as above.
-2. Make sure that you have atleast one product added to your store.
+2. Make sure that you have at least one product added to your store.
 3. Set up a product with any amount .00 cents or 1.00 dollar to check successful or unsuccessful transaction testing respectively.
 4. Add product to cart and proceed to the checkout screen.
 5. Select Paystation credit card payments as payment method and continue.
@@ -41,8 +41,8 @@ You can install this plugin [here](https://wordpress.org/plugins/paystation-wooc
 
 ## Taking Live Credit Payments
 
-Once the site is working as expected you will need to fill in the [Go live] (https://paystation.co.nz/golive) form so that Paystation can test and set your account into Production Mode.
+Once the site is working as expected you will need to fill in the [Go live](https://paystation.co.nz/golive) form so that Paystation can test and set your account into Production Mode.
 
-Your account will be confirmed by Paystation when its live, and after that you need to go back to the Woocommerce checkout settings, and uncheck the 'Enable test mode' box in the Paystation method settings
+Your account will be confirmed by Paystation when it's live, and after that you need to go back to the Woocommerce checkout settings, and uncheck the 'Enable test mode' box in the Paystation method settings.
 
 Congratulations - you're now setup to take credit card Payments!
