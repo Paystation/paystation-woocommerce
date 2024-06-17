@@ -4,6 +4,7 @@ Tags: credit card, paystation, woocommerce, payment gateway, payment, gateway, c
 Requires at least: 4.1
 Tested up to: 6.5.3
 Stable tag: 1.2.4
+Tested Woocommerce up to: 8.8.3
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -13,7 +14,7 @@ Take credit card payments on your store via Paystation.
 
 Accept credit card payments with [Paystation](http://www.paystation.co.nz)
 
-With our secure hosted payment pages you can take payments via multiple card types 
+With our secure hosted payment pages you can take payments via multiple card types
 
 * VISA
 * Mastercard
@@ -40,7 +41,7 @@ With our secure hosted payment pages you can take payments via multiple card typ
 7. Enter HMAC key as provided by Paystation.
 8. Select the 'Enable test mode' box if required.
 9. Click 'Save changes' button.
-10.Email our support team [via email](mailto:support@paystation.co.nz) if you have any issues with the details: Your Paystation ID, Gateway ID, confirming that you are using the Paystation WooCommerce plugin, the website link.
+10. Email our support team [via email](mailto:support@paystation.co.nz) if you have any issues with the details: Your Paystation ID, Gateway ID, confirming that you are using the Paystation WooCommerce plugin, the website link.
 
 = Testing Payments =
 
@@ -76,10 +77,10 @@ Details of the payment also appear in the Paystation Admin website, which you as
 [Visit the Test Card Number page](http://www.paystation.co.nz/for-developers/test-cards/)
 
 == Changelog ==
-= 1.2.4 [2024-05-20] =
+= 1.2.4 [2024-06-17] =
 * Tested the plugin with WordPress version 6.5.3
+* Tested the plugin with Woocommerce version 8.8.3
 
-== Changelog ==
 = 1.2.3 [2022-11-01] =
 * Update supported WordPress version
 
@@ -104,7 +105,7 @@ Details of the payment also appear in the Paystation Admin website, which you as
 * Update supported WordPress version
 
 = 1.1.4 [2020-01-07] =
-* Fixed image asset path 
+* Fixed image asset path
 
 = 1.1.3 [2019-11-12] =
 * Fixed image directory path not loading logo
