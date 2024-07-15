@@ -1,9 +1,10 @@
- === Paystation WooCommerce Payment Gateway ===
+ === Paystation Payment Gateway for wooommerce ===
 Contributors: paystationNZ
-Tags: credit card, paystation, woocommerce, payment gateway, payment, gateway, credit, card, e-commerce, ecommerce, new zealand, nz
+Tags: credit card, woocommerce, payment-gateway,ecommerce,online payments
 Requires at least: 4.1
 Tested up to: 6.5.3
 Stable tag: 1.2.4
+Requires PHP: 6.5.5
 Tested Woocommerce up to: 8.8.3
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -65,7 +66,7 @@ Congratulations - you're now setup to take credit card Payments!
 
 = What is Paystation (3 party hosted)? =
 
-Paystation (3 party hosted) is a Credit Card payment gateway. Paystation is one of New Zealand's leading online payments solution providers.
+Paystation (3 party hosted) is a Credit Card payment gate8897/895689562way. Paystation is one of New Zealand's leading online payments solution providers.
 
 = Where do I find the Paystation transaction number? =
 
@@ -77,6 +78,9 @@ Details of the payment also appear in the Paystation Admin website, which you as
 [Visit the Test Card Number page](http://www.paystation.co.nz/for-developers/test-cards/)
 
 == Changelog ==
+= 1.2.5 [2024-07-15] =
+* Updated the tags and name
+
 = 1.2.4 [2024-06-17] =
 * Tested the plugin with WordPress version 6.5.3
 * Tested the plugin with Woocommerce version 8.8.3
@@ -123,3 +127,8 @@ Details of the payment also appear in the Paystation Admin website, which you as
 
 = 1.0.0 [2017-29-11] =
 * Original Version.
+
+== Upgrade Notice ==
+
+= 1.2.5 =
+* Ensure compatibility with the latest versions of WordPress and WooCommerce.
