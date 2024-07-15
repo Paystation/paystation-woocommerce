@@ -66,7 +66,7 @@ Congratulations - you're now setup to take credit card Payments!
 
 = What is Paystation (3 party hosted)? =
 
-Paystation (3 party hosted) is a Credit Card payment gate8897/895689562way. Paystation is one of New Zealand's leading online payments solution providers.
+Paystation (3 party hosted) is a Credit Card payment gateway. Paystation is one of New Zealand's leading online payments solution providers.
 
 = Where do I find the Paystation transaction number? =
 
