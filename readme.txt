@@ -3,7 +3,7 @@ Contributors: paystationNZ
 Tags: credit card, woocommerce, payment-gateway,ecommerce,online payments
 Requires at least: 4.1
 Tested up to: 6.5.3
-Stable tag: 1.2.4
+Stable tag: 1.2.5
 Requires PHP: 6.5.5
 Tested Woocommerce up to: 8.8.3
 License: GPLv3 or later
