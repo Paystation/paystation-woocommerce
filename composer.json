@@ -5,6 +5,6 @@
   "type": "wordpress-plugin",
   "dist": {
     "url": "https://gitlab.com/trademe/payments/paystation/woocommerce-plugin.git",
-    "type": "git"
+    "type": "vcs"
   }
 }
