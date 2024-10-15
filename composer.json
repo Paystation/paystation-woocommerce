@@ -1,7 +1,6 @@
 {
   "name": "paystation/woocommerce-plugin",
   "description": "WooCommerce PayStation payment gateway plugin",
-  "license": "MIT",
   "type": "wordpress-plugin",
   "dist": {
     "url": "https://gitlab.com/trademe/payments/paystation/woocommerce-plugin.git",
