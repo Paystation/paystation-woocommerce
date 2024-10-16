@@ -1,11 +1,5 @@
 {
   "name": "paystation/woocommerce-plugin",
   "description": "WooCommerce PayStation payment gateway plugin",
-  "type": "wordpress-plugin",
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://gitlab.com/trademe/payments/paystation/woocommerce-plugin.git",
-    }
-  ]
+  "type": "wordpress-plugin"
 }
