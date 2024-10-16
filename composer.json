@@ -1,0 +1,5 @@
+{
+  "name": "paystation/woocommerce",
+  "description": "WooCommerce Paystation payment gateway plugin",
+  "type": "wordpress-plugin"
+}
