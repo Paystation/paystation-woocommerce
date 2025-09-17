@@ -23,6 +23,7 @@ function woocommerce_paystation_init()
 
     class WC_Paystation_Threeparty extends WC_Payment_Gateway
     {
+        const ID = 'threeparty';
         public function __construct()
         {
             $this->id = 'threeparty';
@@ -48,6 +49,7 @@ function woocommerce_paystation_init()
 
             if (version_compare(WOOCOMMERCE_VERSION, '2.0.0', '>=')) {
                 add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
+                add_action( 'wp_enqueue_scripts', array( $this, 'payment_scripts' ) );
             } else {
                 add_action('woocommerce_update_options_payment_gateways', array(&$this, 'process_admin_options'));
             }
@@ -89,6 +91,8 @@ function woocommerce_paystation_init()
         function init_form_fields()
         {
             //Fields to display in admin checkout settings
+            $defaultTitle = 'Credit card — Pay using Paystation';
+            $defaultDescription = 'You will be redirected to Paystation Payment Gateway to complete your purchase.';
             $this->form_fields = array(
                 'enabled' => array(
                     'title' => __('Enable/Disable', 'paystation'),
@@ -99,14 +103,16 @@ function woocommerce_paystation_init()
                 'title' => array(
                     'title' => __('Title:', 'paystation'),
                     'type' => 'text',
+                    'placeholder' => $defaultTitle,
                     'description' => __('This controls the title which the user sees during checkout.', 'paystation'),
-                    'default' => __('Credit card using Paystation Payment Gateway', 'paystation')
+                    'default' => __($defaultTitle, 'paystation')
                 ),
                 'description' => array(
                     'title' => __('Description:', 'paystation'),
                     'type' => 'textarea',
+                    'placeholder' => $defaultDescription,
                     'description' => __('This controls the description which the user sees during checkout.', 'paystation'),
-                    'default' => __('You will be redirected to Paystation Payment Gateway to complete your transaction.', 'paystation')
+                    'default' => __($defaultDescription, 'paystation')
                 ),
                 'paystation_id' => array(
                     'title' => __('Paystation ID', 'paystation'),
@@ -367,6 +373,38 @@ function woocommerce_paystation_init()
             $hmac_hash = hash_hmac('sha512', "{$hmac_timestamp}paystation$body", $key);
             return '?' . http_build_query(['pstn_HMACTimestamp' => $hmac_timestamp, 'pstn_HMAC' => $hmac_hash]);
         }
+
+        /**
+         * Enqueue scripts and styles for the checkout block.
+         *
+         * This method registers the new JavaScript file that defines our payment method
+         * for the block checkout.
+         */
+        public function payment_scripts() {
+            // Bail if we are not on the checkout page.
+            if ( ! is_checkout() ) {
+                return;
+            }
+
+            // Register the script.
+            //this needs to match the Gateway ID in order for the checkout page to recognize the payment_method
+            wp_register_script(
+                WC_Paystation_ThreeParty::ID,
+                plugins_url( 'paystation_woocommerce_payment_gateway.js', __FILE__ ),
+                [
+                    'wc-blocks-registry',
+                    'wc-settings',
+                    'wp-element',
+                ],
+                '1.0.0-beta1',
+                true
+            );
+
+            // Enqueue the script.
+            //this needs to match the Gateway ID in order for the checkout page to recognize the payment_method
+            wp_enqueue_script( WC_Paystation_ThreeParty::ID );
+
+        }
     }
 
     /**
@@ -408,4 +446,60 @@ function woocommerce_paystation_init()
     }
     add_filter('woocommerce_gateway_icon', 'paystation_gateway_icon', 10, 2 );
 
+
+    $hasPaymentMethodRegistry = class_exists('Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry');
+    $hasAbstractPaymentMethodType = class_exists('Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType');
+
+    if ($hasPaymentMethodRegistry && $hasAbstractPaymentMethodType) {
+        /**
+         * In WooCommerce 10+, we need to register the payment method and implement a PHP class to inject data into the Javascript form
+         */
+        add_action(
+            'woocommerce_blocks_payment_method_type_registration',
+            function( Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry $payment_method_registry ) {
+                $payment_method_registry->register( new Paystation_ThreeParty );
+            }
+        );
+
+        final class Paystation_ThreeParty extends Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType {
+            /**
+             * Payment method name/id/slug (matches WC_Paystation_Threeparty::ID in plugin).
+             *
+             * @var string
+             */
+            protected $name = WC_Paystation_Threeparty::ID;
+
+            /**
+             * Initializes the payment method type.
+             */
+            public function initialize() {
+                $this->settings = get_option( 'woocommerce_threeparty_settings', [] );
+            }
+
+            /**
+             * Returns if this payment method should be active. If false, the scripts will not be enqueued.
+             *
+             * @return boolean
+             */
+            public function is_active() {
+                return filter_var( $this->get_setting( 'enabled', false ), FILTER_VALIDATE_BOOLEAN );
+            }
+
+            /**
+             * Returns an array of key=>value pairs of data made available to the payment methods script.
+             *
+             * @return array
+             */
+            public function get_payment_method_data() {
+                return [
+                    'title'       => $this->get_setting( 'title' ),
+                    'description' => $this->get_setting( 'description' ),
+                    'enabled' => $this->get_setting( 'enabled' ),
+                    'logo'        => plugins_url( 'assets/logo.svg', __FILE__ ),
+                    //WIP: unsure what this is used for, but the form seems to check for it
+                    'supports'    => $this->get_supported_features(),
+                ];
+            }
+        }
+    }
 }
