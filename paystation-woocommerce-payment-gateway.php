@@ -2,7 +2,7 @@
 /*
 	Plugin Name: Paystation Payment plugin for WooCommerce
 	Description: Accept credit card payments through Paystation's secure hosted payment pages.
-	Version: 1.2.4
+	Version: 1.3.1
 	Author: Paystation Limited
 	Author URI: https://paystation.co.nz/
 	License: GPL-2.0+
